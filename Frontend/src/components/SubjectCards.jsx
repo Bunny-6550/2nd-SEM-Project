@@ -18,16 +18,15 @@ export default function SubjectCards({
   key={subject}
   onClick={() => setSelectedSubject(subject)}
   className={`
-    rounded-2xl
-    shadow-md
+    subject-card
     p-5
     transition-all
     duration-200
 
     ${
       selectedSubject === subject
-        ? "bg-blue-600 text-white scale-105"
-        : "bg-white hover:shadow-xl hover:scale-105"
+        ? "selected text-white"
+        : "text-white/80 hover:shadow-xl"
     }
   `}
 >

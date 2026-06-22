@@ -1,22 +1,13 @@
 export default function Hero() {
   return (
-    <div className="
-      bg-gradient-to-r
-      from-blue-700
-      to-blue-500
-      rounded-3xl
-      p-12
-      text-white
-      shadow-xl
-    ">
+    <div className={`p-12 card shadow-xl`}> 
 
       <h1 className="text-5xl font-bold">
         Learn Anything Faster
       </h1>
 
-      <p className="text-xl mt-4">
-        Your AI tutor for Math, Physics,
-        Chemistry, Biology and Programming.
+      <p className="text-xl mt-4" style={{color: 'var(--text-secondary)'}}>
+        Your AI tutor for Mathematics, Physics, Chemistry and Programming.
       </p>
 
     </div>

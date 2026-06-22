@@ -1,6 +1,5 @@
 import Sidebar from "./components/Sidebar"
-import Hero from "./components/Hero"
-import SubjectCards from "./components/SubjectCards"
+import Dashboard from "./components/Dashboard"
 import ChatBox from "./components/ChatBox"
 import { useState } from "react"
 
@@ -14,28 +13,18 @@ function App() {
 ])
   const [selectedSubject, setSelectedSubject] =
     useState("Math")
+  const [clearUploadSignal, setClearUploadSignal] = useState(0)
   
   return (
-    <div className="min-h-screen bg-slate-100 flex">
+    <div className="min-h-screen app-bg flex">
 
-      <Sidebar
-  setMessages={setMessages}
-/>
+      <Sidebar messages={messages} setMessages={setMessages} setSelectedSubject={setSelectedSubject} selectedSubject={selectedSubject} onNewChat={() => setClearUploadSignal(c => c + 1)} />
 
       <div className="flex-1 p-10">
 
-        <Hero />
+        <Dashboard />
 
-        <SubjectCards
-  selectedSubject={selectedSubject}
-  setSelectedSubject={setSelectedSubject}
-/>
-
-        <ChatBox
-  selectedSubject={selectedSubject}
-  messages={messages}
-  setMessages={setMessages}
-/>
+        <ChatBox selectedSubject={selectedSubject} messages={messages} setMessages={setMessages} clearUploadSignal={clearUploadSignal} />
 
       </div>
 
