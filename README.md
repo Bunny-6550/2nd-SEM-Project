@@ -1,7 +1,8 @@
-# helpme
+<<<<<<< HEAD
+
 Project
 
-## System Flow
-See the system flow mapping and in-app page: [docs/system_flow.md](docs/system_flow.md)
 
-Run the frontend and open the app, then click "View System Flow" in the sidebar to see the flow page.
+=======
+1st Year Project
+>>>>>>> 0c31fbe80dd7df1e63327f672ba6e363323b109c
