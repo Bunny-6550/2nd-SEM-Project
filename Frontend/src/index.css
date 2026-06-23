@@ -42,6 +42,12 @@ body {
 	background: #1F1F1F;
 }
 
+/* Disable hover transform for containers that shouldn't shift layout (use class 'no-hover') */
+.card.no-hover:hover {
+    transform: none !important;
+    background: var(--card-bg) !important;
+}
+
 /* Sidebar */
 .sidebar-root {
 	background: var(--bg-secondary);

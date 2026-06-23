@@ -1,18 +1,27 @@
-from fastapi import APIRouter
-from app.services.groq_client import ask_groq
 import re
-from app.database.db import SessionLocal
-from app.database.db_model import StudentAttempt
+import os
+from app.services.groq_client import ask_groq
 
-router = APIRouter()
 
-@router.post("/effort")
-async def evaluate_effort(data: dict):
+def _parse_groq_response(text: str):
+    # Expect lines like: Score: 85  Level: HIGH
+    score_match = re.search(r"Score:\s*(\d{1,3})", text)
+    level_match = re.search(r"Level:\s*([A-Za-z]+)", text)
+    score = int(score_match.group(1)) if score_match else None
+    level = level_match.group(1).upper() if level_match else None
+    return score, level
 
-    question = data.get("question", "")
-    answer = data.get("answer", "")
 
-    prompt = f"""
+def evaluate_effort(question: str, answer: str):
+    """Evaluate effort using Groq if available, otherwise a local heuristic.
+
+    Returns: (score:int, level:str)
+    """
+
+    # Try remote model if API key present
+    if os.getenv("GROQ_API_KEY"):
+        try:
+            prompt = f"""
 Question: {question}
 Answer: {answer}
 
@@ -29,39 +38,39 @@ Grade ONLY the effort shown.
 
 Return EXACTLY in this format:
 
-Score: 85
-Level: HIGH
+Score: <integer 0-100>
+Level: LOW|MEDIUM|HIGH
 
-Do not explain.
-Do not ask questions.
-Do not give hints.
-Do not solve the problem.
-Only output Score and Level.
+Do not explain. Do not ask questions. Only output Score and Level.
 """
 
-    result = ask_groq(prompt)
+            resp = ask_groq(prompt)
+            score, level = _parse_groq_response(resp)
+            if score is not None and level is not None:
+                return max(0, min(100, score)), level
+        except Exception:
+            # fallthrough to heuristic
+            pass
 
-    score = int(score.group(1)) if score else 50
-    level = level.group(1) if level else "MEDIUM"
+    # Heuristic fallback
+    text = (answer or "").strip()
+    length = len(text)
+    score = min(100, int(length * 1.5))
 
-    score_value = int(score.group(1)) if score else 50
-    level_value = level.group(1) if level else "MEDIUM"
-    db = SessionLocal()
+    if re.search(r"\d", text):
+        score += 10
+    if re.search(r"=|\+|\-|\/|\\\*|integral|derivative|solve|step|calculate", text, re.I):
+        score += 15
+    if re.search(r"because|therefore|thus|hence|so that", text, re.I):
+        score += 10
 
-    attempt = StudentAttempt(
-    student_name=data.get("student_name", "Student"),
-    subject=data.get("subject", "General"),
-    question=question,
-    response=answer,
-    effort_score=score_value,
-    hint_level=level_value
-)
+    score = max(0, min(100, score))
 
-    db.add(attempt)
-    db.commit()
-    db.close()
+    if score < 35:
+        level = "LOW"
+    elif score < 70:
+        level = "MEDIUM"
+    else:
+        level = "HIGH"
 
-    return {
-    "score": score_value,
-    "level": level_value
-}
+    return score, level

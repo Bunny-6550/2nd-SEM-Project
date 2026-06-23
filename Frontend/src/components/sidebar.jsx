@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export default function Sidebar({ messages, setMessages, setSelectedSubject, selectedSubject, onNewChat }) {
+export default function Sidebar({ messages, setMessages, setSelectedSubject, selectedSubject, onNewChat, studentName, setStudentName }) {
   const [recentTopics, setRecentTopics] = useState([])
   const [editingId, setEditingId] = useState(null)
   const [editTitle, setEditTitle] = useState('')
@@ -106,14 +106,23 @@ export default function Sidebar({ messages, setMessages, setSelectedSubject, sel
       <h1 className="text-3xl font-bold">
         SmartAI
       </h1>
-
       <p className="text-slate-400 mt-2" style={{color: 'var(--text-secondary)'}}>
         AI Tutoring Assistant
       </p>
 
+      {studentName && (
+        <div style={{marginTop:8, marginBottom:8}}>
+          <div style={{fontSize:12, color:'var(--text-secondary)'}}>Signed in as</div>
+          <div style={{fontWeight:700}}>{studentName}</div>
+          <button className="btn-ghost mt-2" onClick={() => { if (setStudentName) { setStudentName(''); try { localStorage.removeItem('studentName') } catch(e){} } }}>Logout</button>
+        </div>
+      )}
+
       <button className="w-full mt-8 btn-ghost p-3 rounded-xl transition" onClick={saveCurrentConversationAndNew}>
         + New Chat
       </button>
+
+      
 
       <div className="mt-10">
         <h3 className="font-semibold mb-4">Recent Topics</h3>

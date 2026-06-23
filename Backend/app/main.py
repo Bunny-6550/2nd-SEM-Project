@@ -9,6 +9,10 @@ from app.api.chat import router as chat_router
 from app.api.upload import router as upload_router
 from app.api.effort import router as effort_router
 from app.api.analytics import router as analytics_router
+from app.database.db import engine, Base
+
+# create DB tables on startup
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 

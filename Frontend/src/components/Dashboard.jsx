@@ -1,7 +1,7 @@
 import Analytics from "./Analytics"
 import EffortPanel from "./EffortPanel"
 
-export default function Dashboard() {
+export default function Dashboard({ effortResult }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
 
@@ -22,8 +22,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="md:col-span-4 col-span-1">
-        <EffortPanel />
+        <div className="md:col-span-4 col-span-1">
+        <EffortPanel effortResult={effortResult} />
       </div>
 
     </div>

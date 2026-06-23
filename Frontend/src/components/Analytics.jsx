@@ -70,7 +70,7 @@ export default function Analytics() {
         </div>
         <div className="flex-1 flex flex-col">
           <div className="text-sm" style={{color: '#FFFFFF'}}>Avg Effort</div>
-          <div className="text-2xl font-bold" style={{color: '#FFFFFF'}}>2.3</div>
+          <div className="text-2xl font-bold" style={{color: '#FFFFFF'}}>7.8</div>
         </div>
       </div>
     </div>
